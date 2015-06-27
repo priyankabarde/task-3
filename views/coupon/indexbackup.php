@@ -1,4 +1,43 @@
 <head>
+   
+    <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel-group" id="panel-658249">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						 <a class="panel-title" data-toggle="collapse" data-parent="#panel-658249" href="#panel-element-23455">Collapsible Group Item #1</a>
+					</div>
+					<div id="panel-element-23455" class="panel-collapse collapse in">
+						<div class="panel-body">
+							Anim pariatur cliche...
+						</div>
+                                                <div class="panel-body">
+							Anim pariatur cliche...
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						 <a class="panel-title" data-toggle="collapse" data-parent="#panel-658249" href="#panel-element-34340">Collapsible Group Item #2</a>
+					</div>
+					<div id="panel-element-34340" class="panel-collapse collapse">
+						<div class="panel-body">
+							Anim pariatur cliche...
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
     <script>
         
         

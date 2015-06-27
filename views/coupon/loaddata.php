@@ -43,7 +43,7 @@ use yii\widgets\LinkPager;
                     </div>
                     <div class="col-md-4" >
 
-                            <button type="button" class="btn btn-lg btn-block" style="background-color:#0066FF;position:relative;margin-top:30%;" onclick=<?= Html::encode("window.location.href='".$row->Link."'"); ?>>
+                            <button type="button" class="btn btn-success btn-lg btn-block" style="position:relative;margin-top:30%;" onclick=<?= Html::encode("window.location.href='".$row->Link."'"); ?>>
                                     Grab Deal!
                             </button>
                     </div>

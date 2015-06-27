@@ -50,6 +50,8 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\Coupon;
 use app\models\CouponCategoryInfo;
+use app\models\Website;
+use app\models\CouponCategories;
 use yii\helpers\Json;
 use yii\data\Pagination;
 use PHPExcel;
@@ -256,4 +258,6 @@ class CouponController extends \yii\web\Controller
         // Write the Excel file to filename some_excel_file.xlsx in the current directory
         $objWriter->save('CouponData.xlsx'); 
     }
+    
+    
 }
