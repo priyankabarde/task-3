@@ -41,7 +41,7 @@ use yii\widgets\LinkPager;
                 }
                 
                 //updating global variables as well
-                filter = cb.parentNode.getAttribute('name');
+                filter = cb.parentNode.getAttribute('value');
                 value = cb.value;
                 
                 xmlhttp.open("GET","index.php?r=coupon/loaddata&filter="+filter+"&value="+value,true);
@@ -144,13 +144,13 @@ use yii\widgets\LinkPager;
 						</div>
 					</div>
 					<div class="row" value="type" style='padding-bottom: 8px;border-left: solid;border-left-color: #F9F9F9;border-left-width: 4px;border-bottom: solid;border-bottom-color:#F9F9F9;border-bottom-width: 2px '>
-						<div class="col-md-12" value="Type" name="type"><h4>TYPE</h4><br/>
+						<div class="col-md-12" value="type" name="type"><h4>TYPE</h4><br/>
                                                     <input type="radio" name="filter" value ="0" onclick="handleClick(this);"/>&nbsp;&nbsp;Coupons<br />
                                                     <input type="radio" name="filter" value ="1" onclick="handleClick(this);"/>&nbsp;&nbsp;Deals<br />
 						</div>
 					</div>
 					<div class="row" value="store" style='padding-bottom: 8px;border-left: solid;border-left-color: #F9F9F9;border-left-width: 4px;border-bottom: solid;border-bottom-color:#F9F9F9;border-bottom-width: 2px ''>
-						<div class="col-md-12" value="Store" name="store"><h4>STORE</h4><br/>	
+						<div class="col-md-12" value="store" name="store"><h4>STORE</h4><br/>	
                                                     <?php foreach ($websites as $website) {?>
                                                     <input type="radio" name="filter" value ="<?php echo $website->WebsiteID ?>" onclick="handleClick(this)";/>&nbsp;&nbsp;<?php echo $website->WebsiteName ?><br />
                                                     <?php } ?>
@@ -165,7 +165,7 @@ use yii\widgets\LinkPager;
 						</div>
 					</div>
 					<div class="row" value="category" style='padding-bottom: 8px;border-left: solid;border-left-color: #F9F9F9;border-left-width: 4px;border-bottom: solid;border-bottom-color:#F9F9F9;border-bottom-width: 2px ''>
-						<div class="col-md-12" value="Category" name="category"><h4>CATEGORY</h4><br/>
+						<div class="col-md-12" value="category" name="category"><h4>CATEGORY</h4><br/>
                                                     <?php foreach ($categories as $category) {?>
                                                     <input type="radio" name="filter" value ="<?php echo $category->CategoryID ?>" onclick="handleClick(this)";/>&nbsp;&nbsp;<?php echo $category->Name ?><br />
                                                     <?php } ?>

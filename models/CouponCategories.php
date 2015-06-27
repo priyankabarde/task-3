@@ -16,6 +16,14 @@ class CouponCategories extends ActiveRecord
    {
        return 'CouponCategories';
    }
+   
+   public static function getAllCouponCategories()
+   {
+       $categories = CouponCategories::find()
+                                        ->limit(10) //limiting results to onlt 10
+                                        ->all();
+       return $categories;
+   }
 }
 
 ?>

@@ -12,7 +12,14 @@ use yii\db\ActiveRecord;
 
 class Website extends ActiveRecord
 {
-    
+
+    public static function getAllWebsites()
+    {
+       $websites = Website::find()
+                            ->limit(15)  //limiting it to only 15
+                            ->all();
+       return $websites;
+    }
 }
 
 ?>

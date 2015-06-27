@@ -60,6 +60,7 @@ class CouponController extends \yii\web\Controller
 {
     public function actionIndex()
     {
+        /*
         $coupons1 = Coupon::find();
         $websites1 = \app\models\Website::find();
         $categories1 = \app\models\CouponCategories::find();
@@ -83,7 +84,15 @@ class CouponController extends \yii\web\Controller
         $categories = $categories1
                       ->limit(10)  //showing only 10
                       ->all();
-                
+       */
+        
+        $pageSize = 60;
+        $result = Coupon::getAllCoupons($pageSize);
+        $coupons = $result['coupons'];
+        $pagination = $result['pagination'];
+        
+        $websites = Website::getAllWebsites();
+        $categories = CouponCategories::getAllCouponCategories();
        
               
         return $this->render('index',['coupons'=>$coupons,'pagination' => $pagination,'websites'=>$websites,'categories'=>$categories]);
@@ -92,8 +101,8 @@ class CouponController extends \yii\web\Controller
     
     public function actionLoaddata()        
     {
-        //$value=(int)0; 
-        //$filter = 'type';
+        $value='none'; 
+        $filter = 'default';
         
         if(isset($_GET['filter']))
             $filter = strval($_GET['filter']);
@@ -101,6 +110,7 @@ class CouponController extends \yii\web\Controller
         if(isset($_GET['value']))
             $value = intval($_GET['value']);
         
+        /*
         $result1 = Coupon::find();
         
         // PENDING : Removing this as pagination is not working
@@ -146,59 +156,14 @@ class CouponController extends \yii\web\Controller
                                ->limit(60)
                                ->all();
             
-        }
+        }*/
        
+        $result = Coupon::getFilterResult($filter,$value);
         //return $this->renderPartial('loaddata',['result'=>$result,'pagination' => $pagination]);
         return $this->renderPartial('loaddata',['result'=>$result]);
         
     }
-    
-    /*
-    public function actionCreateExcel()
-    {
-          //  Yii::import('ext.phpexcel.XPHPExcel');    
-          //      $objPHPExcel= XPHPExcel::createPHPExcel();
-          //      $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
-           //                            ->setLastModifiedBy("Maarten Balliauw")
-           //                            ->setTitle("Office 2007 XLSX Test Document")
-            //                           ->setSubject("Office 2007 XLSX Test Document")
-           //                            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-           //                            ->setKeywords("office 2007 openxml php")
-           //                            ->setCategory("Test result file"); 
-        
-
-          $objPHPExcel = new \PHPExcel();
-          // Add some data
-          $objPHPExcel->setActiveSheetIndex(0)
-                      ->setCellValue('A1', 'Hello')
-                      ->setCellValue('B2', 'world!')
-                      ->setCellValue('C1', 'Hello')
-                      ->setCellValue('D2', 'world!');
-
-          // Miscellaneous glyphs, UTF-8
-          $objPHPExcel->setActiveSheetIndex(0)
-                      ->setCellValue('A4', 'Miscellaneous glyphs')
-                      ->setCellValue('A5', 'Ã©Ã Ã¨Ã¹Ã¢ÃªÃ®Ã´Ã»Ã«Ã¯Ã¼Ã¿Ã¤Ã¶Ã¼Ã§');
-
-          // Rename worksheet
-          $objPHPExcel->getActiveSheet()->setTitle('Simple');
-
-
-          // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-          $objPHPExcel->setActiveSheetIndex(0);
-
-          $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-          // Redirect output to a clientâ€™s web browser (Excel5)
-          header('Content-Type: application/vnd.ms-excel');
-          header('Content-Disposition: attachment;filename="01simple.xls"');
-          
-          //
-
-          
-          $objWriter->save('php://output');
-                //Yii::app()->end();
-    }
-    */
+   
     public function actionDownload()
     {
         if(isset($_GET['filter']))
@@ -207,6 +172,9 @@ class CouponController extends \yii\web\Controller
         if(isset($_GET['value']))
             $value = intval($_GET['value']);
         
+        $result = Coupon::getFilterResult($filter,$value);
+        
+        /*
         $result1 = Coupon::find();
         switch($filter)
         {
@@ -246,7 +214,7 @@ class CouponController extends \yii\web\Controller
                                ->all();
             
         }
-
+        */
         // Instantiate a new PHPExcel object
         $objPHPExcel = new \PHPExcel(); 
         // Set the active Excel worksheet to sheet 0
