@@ -60,49 +60,26 @@ use PHPExcel;
 
 class CouponController extends \yii\web\Controller
 {
+    
     public function actionIndex()
     {
-        /*
-        $coupons1 = Coupon::find();
-        $websites1 = \app\models\Website::find();
-        $categories1 = \app\models\CouponCategories::find();
-        
-        $pagination = new Pagination([
-            'defaultPageSize' => 60,
-            'totalCount' => $coupons1->count(),
-        ]);
-        
-        $coupons = $coupons1
-                   ->with('website')
-                   ->joinWith('couponCategories')
-                   ->offset($pagination->offset)
-                   ->limit($pagination->limit)
-                   ->all(); //this one works and to display just 60 coupons on the main page
-        
-        $websites = $websites1
-                   ->limit(15) //showing only 15 
-                   ->all();
-        
-        $categories = $categories1
-                      ->limit(10)  //showing only 10
-                      ->all();
-       */
-        
+        $model = new Coupon;
         $pageSize = 60;
-        $result = Coupon::getAllCoupons($pageSize);
-        $coupons = $result['coupons'];
-        $pagination = $result['pagination'];
+        $couponData = $model->getAllCoupons($pageSize);
+        $result = $couponData['coupons'];
+        $pagination = $couponData['pagination'];
         
         $websites = Website::getAllWebsites();
         $categories = CouponCategories::getAllCouponCategories();
-       
-              
-        return $this->render('index',['coupons'=>$coupons,'pagination' => $pagination,'websites'=>$websites,'categories'=>$categories]);
+         
+        //Coupon::$lastresult = $result;
+        return $this->render('index',['coupons'=>$result,'pagination' => $pagination,'websites'=>$websites,'categories'=>$categories]);
     }
     
     
     public function actionLoaddata()        
     {
+        $model = new Coupon;
         $value='none'; 
         $filter = 'default';
         
@@ -112,111 +89,23 @@ class CouponController extends \yii\web\Controller
         if(isset($_GET['value']))
             $value = intval($_GET['value']);
         
-        /*
-        $result1 = Coupon::find();
-        
-        // PENDING : Removing this as pagination is not working
-        $pagination = new Pagination([
-            'defaultPageSize' => 5,
-            'totalCount' => $result1->count(),
-        ]);
-        
-        switch($filter)
-        {
-            case 'type':        $result = $result1
-                                        ->where("IsDeal=$value")
-                                        //->offset($pagination->offset)   //  PENDING : Removing this as pagination is not working
-                                        //->limit($pagination->limit)     //  PENDING : Removing this as pagination is not working
-                                        ->limit(60)
-                                        ->all();
-                break;
-            
-            case 'store':       $result = $result1
-                                        ->where("WebsiteID=$value") 
-                                        ->with('website')  
-                                        ->joinWith('couponCategories')
-                                        //->offset($pagination->offset)     //  PENDING : Removing this as pagination is not working
-                                        //->limit($pagination->limit)       //  PENDING : Removing this as pagination is not working
-                                        ->limit(60)
-                                        ->all();
-                break;
-            
-            case 'category':    
-                                $result = $result1
-                                        ->where("CouponCategories.CategoryID=$value")
-                                        ->with('website')
-                                        ->joinWith('couponCategories')
-                                        //->offset($pagination->offset)     //  PENDING : Removing this as pagination is not working
-                                        //->limit($pagination->limit)       //  PENDING : Removing this as pagination is not working
-                                        ->limit(60)
-                                        ->all();
-                break;
-            
-            default: $result = $result1
-                               //->offset($pagination->offset)              //  PENDING : Removing this as pagination is not working
-                               //->limit($pagination->limit)                //  PENDING : Removing this as pagination is not working
-                               ->limit(60)
-                               ->all();
-            
-        }*/
-       
-        $result = Coupon::getFilterResult($filter,$value);
-        //return $this->renderPartial('loaddata',['result'=>$result,'pagination' => $pagination]);
+        $result = $model->getFilterResult($filter,$value);
+        //Coupon::$lastresult = $result;
         return $this->renderPartial('loaddata',['result'=>$result]);
         
     }
    
     public function actionDownload()
-    {
+    {   
+        $model = new Coupon;
         if(isset($_GET['filter']))
-            $filter = strval($_GET['filter']);
+           $filter = strval($_GET['filter']);
         
         if(isset($_GET['value']))
-            $value = intval($_GET['value']);
+          $value = intval($_GET['value']);
         
-        $result = Coupon::getFilterResult($filter,$value);
-        
-        /*
-        $result1 = Coupon::find();
-        switch($filter)
-        {
-            case 'type':        $result = $result1
-                                        ->where("IsDeal=$value")
-                                        //->offset($pagination->offset)   //  PENDING : Removing this as pagination is not working
-                                        //->limit($pagination->limit)     //  PENDING : Removing this as pagination is not working
-                                        ->limit(60)
-                                        ->all();
-                break;
-            
-            case 'store':       $result = $result1
-                                        ->where("WebsiteID=$value") 
-                                        ->with('website')  
-                                        ->joinWith('couponCategories')
-                                        //->offset($pagination->offset)     //  PENDING : Removing this as pagination is not working
-                                        //->limit($pagination->limit)       //  PENDING : Removing this as pagination is not working
-                                        ->limit(60)
-                                        ->all();
-                break;
-            
-            case 'category':    
-                                $result = $result1
-                                        ->where("CouponCategories.CategoryID=$value")
-                                        ->with('website')
-                                        ->joinWith('couponCategories')
-                                        //->offset($pagination->offset)     //  PENDING : Removing this as pagination is not working
-                                        //->limit($pagination->limit)       //  PENDING : Removing this as pagination is not working
-                                        ->limit(60)
-                                        ->all();
-                break;
-            
-            default: $result = $result1
-                               //->offset($pagination->offset)              //  PENDING : Removing this as pagination is not working
-                               //->limit($pagination->limit)                //  PENDING : Removing this as pagination is not working
-                               ->limit(60)
-                               ->all();
-            
-        }
-        */
+        $result = $model->getFilterResult($filter,$value);
+        //$result = Coupon::$lastresult;
         // Instantiate a new PHPExcel object
         $objPHPExcel = new \PHPExcel(); 
         // Set the active Excel worksheet to sheet 0
@@ -226,8 +115,8 @@ class CouponController extends \yii\web\Controller
         // We fetch each database result row into $row in turn
         
         
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(4);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(40);
         //Make Headings
@@ -243,7 +132,7 @@ class CouponController extends \yii\web\Controller
         { 
             // Set cell An to the "name" column from the database (assuming you have a column called name)
             //    where n is the Excel row number (ie cell A1 in the first row)
-            $objPHPExcel->getActiveSheet()->SetCellValue('A'.$rowCount, $rowCount); 
+            $objPHPExcel->getActiveSheet()->SetCellValue('A'.$rowCount, $rowCount-1); 
             // Set cell Bn to the "age" column from the database (assuming you have a column called age)
             //    where n is the Excel row number (ie cell A1 in the first row)
             $objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount, $row->website->WebsiteName);
@@ -259,5 +148,5 @@ class CouponController extends \yii\web\Controller
         $objWriter->save('CouponData.xlsx'); 
     }
     
-    
-}
+}  
+?>

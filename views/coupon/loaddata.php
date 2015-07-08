@@ -23,7 +23,7 @@ use yii\widgets\LinkPager;
        <table style="border-collapse: separate;border-spacing: 10px;">
        <?php foreach($result as $row) { ?>
               <tr style="padding:3px"><td>
-                <div class="row" style="border-style:dotted;background-color:#F5F5F5;" onmouseover="highlight(this);">
+                <div class="row" style="border-style:dotted;background-color:#F5F5F5;">
                     <div class="col-md-8">
                             <div class="row">
                                     <div class="col-md-12">

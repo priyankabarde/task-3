@@ -13,6 +13,8 @@ use yii\data\Pagination;
 
 class Coupon extends ActiveRecord
 {
+    public static $lastresult=null;
+    
     public function getWebsite()
     {
         return $this->hasOne(Website::className(), ['WebsiteID'=>'WebsiteID']);
@@ -25,44 +27,38 @@ class Coupon extends ActiveRecord
             ->viaTable('CouponCategoryInfo', ['CouponID' => 'CouponID']);
     }
     
-    public static function getFilterResult($filter,$value)
+    public function getFilterResult($filter,$value)
     {
-        $result1 = Coupon::find();
+        $filterValue;
         switch($filter)
         {
-            case 'type':        $result = $result1
-                                        ->where("IsDeal=$value")
-                                        ->limit(60)
-                                        ->all();
-                break;
+            case 'type':        $filterValue = 'IsDeal';
+                                break;
             
-            case 'store':       $result = $result1
-                                        ->where("WebsiteID=$value") 
-                                        ->with('website')  
-                                        ->joinWith('couponCategories')
-                                        ->limit(60)
-                                        ->all();
-                break;
+            case 'store':       $filterValue = 'WebsiteID';
+                                break;
             
-            case 'category':    
-                                $result = $result1
-                                        ->where("CouponCategories.CategoryID=$value")
-                                        ->with('website')
-                                        ->joinWith('couponCategories')
-                                        ->limit(60)
-                                        ->all();
-                break;
+            case 'category':    $filterValue = 'CouponCategories.CategoryID';
+                                break;
             
-            default: $result = $result1
-                               ->limit(60)
-                               ->all();
+            default:            $result = $this->getAllCoupons();
+                                return $result['coupons'];
+                        
             
         }
+        $result = Coupon::findByCondition(["$filterValue" => $value])
+                        ->with('website')
+                        ->joinWith('couponCategories')
+                        ->limit(60)
+                        ->all();
+        
         return $result;
     }
     
-    public static function getAllCoupons($pageSize = '100')
+    //cannot make this function static because updating class attribute in it.
+    public function getAllCoupons($pageSize = '100')
     {
+        
         $coupons1 = Coupon::find();
         
         $pagination = new Pagination([
@@ -77,6 +73,7 @@ class Coupon extends ActiveRecord
                    ->limit($pagination->limit)
                    ->all(); //this one works and to display just 60 coupons on the main page
         
+         //$this->lastresult = $coupons;
         return ([
                     'coupons'=>$coupons,
                     'pagination'=>$pagination
